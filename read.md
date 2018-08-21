@@ -28,3 +28,4 @@
 ## 17.拆分reducer，用combineReducer合并并且导出
 ## 18.immutable.js生成immutable对象,通过get set修改
 ## 19.用redux-imutable来生成combineReducer,state就是一个immutable对象
+## 20.onClick={()=>{}}

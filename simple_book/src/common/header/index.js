@@ -18,6 +18,48 @@ import {
  } from './style.js'
 
 class Header extends Component {
+	getSearchInfoList() {
+		// 将store中immutable数组转变为普通数组
+		const jsList = this.props.list.toJS()
+		// 定义一个临时数组
+		const pageList = []
+		// 每页只显示10条数据 jsList.length - (this.props.totalPage-1)*10
+		if (jsList.length) {
+			// 如果当前是最后一页
+			if( this.props.page === this.props.totalPage ) {
+				for(let k = (this.props.page - 1) * 10;k < jsList.length; k++) {
+					pageList.push(
+						<SearchInfoItem key={k}>{jsList[k]}</SearchInfoItem>
+					)
+				}
+			} else {
+				for(let k = (this.props.page - 1) * 10;k < this.props.page * 10; k++) {
+					pageList.push(
+						<SearchInfoItem key={k}>{jsList[k]}</SearchInfoItem>
+					)
+				}
+			}
+		}
+		if (this.props.focused || this.props.mouseIn) {
+			return (
+				<SearchInfo
+					onMouseEnter={this.props.handleMouseEnter}
+					onMouseLeave={this.props.handleMouseLeave}
+				>
+					<SearchInfoTitle>
+					热门搜索
+						<SearchInfoSwitch onClick={()=>{this.props.handleSwitch(this.props.page, this.props.totalPage)}}>
+						<i className="iconfont">&#xe786;</i>
+						换一批
+						</SearchInfoSwitch>
+					</SearchInfoTitle>
+						{pageList}
+				</SearchInfo>
+			)
+		}else {
+			return null
+		}
+	}
 	render() {
 		return (
 				<HeaderWrapper>
@@ -40,33 +82,7 @@ class Header extends Component {
 								></NavSearch>
 							</CSSTransition>
 							<i className={this.props.focused ? 'focused iconfont' : 'iconfont'}>&#xe644;</i>
-							<SearchInfo>
-								<SearchInfoTitle>
-								热门搜索
-									<SearchInfoSwitch>
-									换一批
-									</SearchInfoSwitch>
-								</SearchInfoTitle>
-								<div>
-									<SearchInfoItem>教育</SearchInfoItem>
-									<SearchInfoItem>教育</SearchInfoItem>
-									<SearchInfoItem>教育</SearchInfoItem>
-									<SearchInfoItem>教育</SearchInfoItem>
-									<SearchInfoItem>教育</SearchInfoItem>
-									<SearchInfoItem>教育</SearchInfoItem>
-									<SearchInfoItem>教育</SearchInfoItem>
-									<SearchInfoItem>教育</SearchInfoItem>
-									<SearchInfoItem>教育</SearchInfoItem>
-									<SearchInfoItem>教育</SearchInfoItem>
-									<SearchInfoItem>教育</SearchInfoItem>
-									<SearchInfoItem>教育</SearchInfoItem>
-									<SearchInfoItem>教育</SearchInfoItem>
-									<SearchInfoItem>教育</SearchInfoItem>
-									<SearchInfoItem>教育</SearchInfoItem>
-									<SearchInfoItem>教育</SearchInfoItem>
-									
-								</div>
-							</SearchInfo>
+							{this.getSearchInfoList()}
 						</SearchWrapper>
 					</Nav>
 					<Addition>
@@ -84,28 +100,38 @@ class Header extends Component {
 const mapStateToProps = (state) => {
 	return {
 		// state.getIn(['header', 'focused'])等价写法
-		focused:state.get('header').get('focused')
+		focused: state.get('header').get('focused'),
+		list: state.get('header').get('list'),
+		mouseIn: state.getIn(['header', 'mouseIn']),
+		page: state.getIn(['header', 'page']),
+		totalPage: state.getIn(['header', 'totalPage'])
 	}
 }
 // 将Dispath传给当前组件当作props
 const mapDispathToProps = (dispath) => {
 	return {
 		handleInputFocus() {
-			// 创建一个action
-			// const action = {
-			// 	type: 'search_focus'
-			// };
 			// 派发action,交给reducer处理
+			dispath(actionCreators.getList())
 			dispath(actionCreators.searchFocus())
 		},
 		handleInputBlur() {
-			// 创建一个action
-			// const action = {
-			// 	type: 'search_blur'
-			// };
 			// 派发action,交给reducer处理
 			dispath(actionCreators.searchBlur())
-		}
+		},
+		handleMouseEnter() {
+			dispath(actionCreators.onMouseEnter())
+		},
+		handleMouseLeave() {
+			dispath(actionCreators.onMouseLeave())
+		},
+		handleSwitch(page, totalPage) {
+			if(page < totalPage) {
+				dispath(actionCreators.switchItem(page + 1))
+			} else {
+				dispath(actionCreators.switchItem(1))
+			}
+		} 
 	}
 }
 export default connect(mapStateToProps, mapDispathToProps)(Header)
