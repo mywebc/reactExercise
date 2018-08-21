@@ -1,2 +1,6 @@
 export const SEARCH_FOCUS = 'header/SEARCH_FOCUS'
 export const SEARCH_BLUR = 'header/SEARCH_BLUR'
+export const CHANGELIST = 'header/CHANGELIST'
+export const ONMOUSE_ENTER = 'header/ONMOUSE_ENTER'
+export const ONMOUSE_LEAVE = 'header/ONMOUSE_LEAVE'
+export const SWITCHITEM = 'header/SWITCHITEM'
