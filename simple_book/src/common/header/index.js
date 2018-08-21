@@ -17,7 +17,43 @@ import {
 	SearchInfoItem
  } from './style.js'
 
+
+
 class Header extends Component {
+	getListArea (show){
+		if(show){
+			return (
+					<SearchInfo>
+						<SearchInfoTitle>
+						热门搜索
+							<SearchInfoSwitch>
+							换一批
+							</SearchInfoSwitch>
+						</SearchInfoTitle>
+						<div>
+							<SearchInfoItem>教育</SearchInfoItem>
+							<SearchInfoItem>教育</SearchInfoItem>
+							<SearchInfoItem>教育</SearchInfoItem>
+							<SearchInfoItem>教育</SearchInfoItem>
+							<SearchInfoItem>教育</SearchInfoItem>
+							<SearchInfoItem>教育</SearchInfoItem>
+							<SearchInfoItem>教育</SearchInfoItem>
+							<SearchInfoItem>教育</SearchInfoItem>
+							<SearchInfoItem>教育</SearchInfoItem>
+							<SearchInfoItem>教育</SearchInfoItem>
+							<SearchInfoItem>教育</SearchInfoItem>
+							<SearchInfoItem>教育</SearchInfoItem>
+							<SearchInfoItem>教育</SearchInfoItem>
+							<SearchInfoItem>教育</SearchInfoItem>
+							<SearchInfoItem>教育</SearchInfoItem>
+							<SearchInfoItem>教育</SearchInfoItem>
+						</div>
+					</SearchInfo>
+				)
+		}else {
+			return null
+		}
+}
 	render() {
 		return (
 				<HeaderWrapper>
@@ -40,33 +76,7 @@ class Header extends Component {
 								></NavSearch>
 							</CSSTransition>
 							<i className={this.props.focused ? 'focused iconfont' : 'iconfont'}>&#xe644;</i>
-							<SearchInfo>
-								<SearchInfoTitle>
-								热门搜索
-									<SearchInfoSwitch>
-									换一批
-									</SearchInfoSwitch>
-								</SearchInfoTitle>
-								<div>
-									<SearchInfoItem>教育</SearchInfoItem>
-									<SearchInfoItem>教育</SearchInfoItem>
-									<SearchInfoItem>教育</SearchInfoItem>
-									<SearchInfoItem>教育</SearchInfoItem>
-									<SearchInfoItem>教育</SearchInfoItem>
-									<SearchInfoItem>教育</SearchInfoItem>
-									<SearchInfoItem>教育</SearchInfoItem>
-									<SearchInfoItem>教育</SearchInfoItem>
-									<SearchInfoItem>教育</SearchInfoItem>
-									<SearchInfoItem>教育</SearchInfoItem>
-									<SearchInfoItem>教育</SearchInfoItem>
-									<SearchInfoItem>教育</SearchInfoItem>
-									<SearchInfoItem>教育</SearchInfoItem>
-									<SearchInfoItem>教育</SearchInfoItem>
-									<SearchInfoItem>教育</SearchInfoItem>
-									<SearchInfoItem>教育</SearchInfoItem>
-									
-								</div>
-							</SearchInfo>
+							{ this.getListArea(this.props.focused) }
 						</SearchWrapper>
 					</Nav>
 					<Addition>
