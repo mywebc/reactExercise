@@ -48,8 +48,8 @@ class Header extends Component {
 				>
 					<SearchInfoTitle>
 					热门搜索
-						<SearchInfoSwitch onClick={()=>{this.props.handleSwitch(this.props.page, this.props.totalPage)}}>
-						<i className="iconfont">&#xe786;</i>
+						<SearchInfoSwitch onClick={()=>{this.props.handleSwitch(this.props.page, this.props.totalPage, this.cicleIcon)}}>
+							<i  ref={(icon)=>{this.cicleIcon = icon}} className="iconfont cicle">&#xe786;</i>
 						换一批
 						</SearchInfoSwitch>
 					</SearchInfoTitle>
@@ -77,11 +77,11 @@ class Header extends Component {
 							>	
 								<NavSearch 
 								className={this.props.focused ? 'focused' : ''}
-								onFocus={this.props.handleInputFocus}
+								onFocus={()=>{this.props.handleInputFocus(this.props.list)}}
 								onBlur={this.props.handleInputBlur}
 								></NavSearch>
 							</CSSTransition>
-							<i className={this.props.focused ? 'focused iconfont' : 'iconfont'}>&#xe644;</i>
+							<i className={this.props.focused ? 'focused iconfont zoom' : 'iconfont zoom'}>&#xe644;</i>
 							{this.getSearchInfoList()}
 						</SearchWrapper>
 					</Nav>
@@ -110,9 +110,9 @@ const mapStateToProps = (state) => {
 // 将Dispath传给当前组件当作props
 const mapDispathToProps = (dispath) => {
 	return {
-		handleInputFocus() {
+		handleInputFocus(list) {
 			// 派发action,交给reducer处理
-			dispath(actionCreators.getList())
+			(list.size === 0) && dispath(actionCreators.getList())
 			dispath(actionCreators.searchFocus())
 		},
 		handleInputBlur() {
@@ -125,7 +125,16 @@ const mapDispathToProps = (dispath) => {
 		handleMouseLeave() {
 			dispath(actionCreators.onMouseLeave())
 		},
-		handleSwitch(page, totalPage) {
+		handleSwitch(page, totalPage, icon) {
+			// 字符串替换，用“”替换非数字
+			let originAngle = icon.style.transform.replace(/[^0-9]/ig,'')
+			console.log(originAngle)
+			if(originAngle) {
+				originAngle = parseInt(originAngle, 10)
+			} else {
+				originAngle = 0
+			}
+			icon.style.transform = 'rotate('+(originAngle + 360)+'deg)'
 			if(page < totalPage) {
 				dispath(actionCreators.switchItem(page + 1))
 			} else {
