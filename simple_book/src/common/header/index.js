@@ -17,6 +17,8 @@ import {
 	SearchInfoItem
  } from './style.js'
 
+
+
 class Header extends Component {
 	getSearchInfoList() {
 		// 将store中immutable数组转变为普通数组
