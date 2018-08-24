@@ -23,7 +23,7 @@ class Topic extends Component {
             </TopicWrapper>
         )
     }
-    componentWillMount() {
+    componentDidMount() {
         this.props.queryTopicList()
     }
 }

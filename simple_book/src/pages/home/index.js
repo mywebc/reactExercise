@@ -6,10 +6,17 @@ import Writer from './components/Writer'
 import {
     HomeWrapper,
     HomeLeft,
-    HomeRight
+    HomeRight,
+    BackTop
 } from './style'
 
+import { connect } from 'react-redux'
+import { actionCreators } from "./store";
+
 class Home extends Component {
+    handleTop() {
+        window.scrollTo(0,0)
+    }
     render() {
         return (
             <HomeWrapper>
@@ -22,9 +29,33 @@ class Home extends Component {
                     <Recommend/>
                     <Writer/>
                 </HomeRight>
+                {
+                    this.props.showFlag ? <BackTop onClick={this.handleTop}>顶部</BackTop> : null
+                }
             </HomeWrapper>
          )
     }
+    componentDidMount() {
+        this.bindEvents()
+    }
+    // 监听scroll事件
+    bindEvents() {
+        window.addEventListener('scroll', this.props.changeScroll())
+    }
+}
+const mapState = (state) =>({
+    showFlag: state.getIn(['home', 'showFlag'])
+})
+const mapDispath = (dispath) =>{
+    return {
+        changeScroll() {
+            if(document.documentElement.scrollTop > 100) {
+                dispath(actionCreators.changeScrollFlag(true))
+            }else {
+                dispath(actionCreators.changeScrollFlag(false))
+            }
+        }
+    }
 }
 
-export default Home
+export default connect(mapState, mapDispath)(Home)
